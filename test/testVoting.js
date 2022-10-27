@@ -32,7 +32,6 @@ contract("Voting", accounts => {
         describe("Smart contract owner test :", function () {
 
             it("should define the owner of the smart contract", async () => {
-                // const contractOwner = await votingInstance.owner();
                 expect(await votingInstance.owner()).to.be.equal(_owner);
             });
     
