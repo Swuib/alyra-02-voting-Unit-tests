@@ -35,7 +35,7 @@ Otherwise I think I have tested all the possibilities of interaction and functio
 
     ##### My testing script is located in test/testVoting.js
 
-    ##### The script is testing 50 cases
+    ##### The script is testing 51 cases
 ---
 
 ## result obtained :
