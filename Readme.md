@@ -24,7 +24,8 @@ Otherwise I think I have tested all the possibilities of interaction and functio
 ---
 
 ## Usage :
-* Open the folder in VSC and then open the terminal and execute the command ```$ truffle compile``` to compile the contract. 
+* Open the folder in VSC, then open the terminal and run the command above to install the dependencies.
+* Then compile the contract with the command :```$ truffle compile``` 
 * Then to run the test on the voting contract, run the command : ``$ truffle test``
 * Note : 
     
