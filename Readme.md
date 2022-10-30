@@ -4,7 +4,11 @@
 
 ## Notes :
 
-For this exercise, I decided to do it sequentially for v1 then I saw that it was a bad practice to do all my tests on a single contract deployment, that's why I made a v2 that starts at line 357. This way, the tests follow the normal way of working of the contract, which led me to make some round trips when the workflow state changes. (maybe an optimization to do with that, because I have redundancies in the tests, but it's a bias, and at least everything is tested). I could also detect a bug in the for loop of the tallyVotes() function because the loop should be set to 1 instead of 0 to bypass the GENESIS proposal which is originally set to not take into account people who didn't vote. 
+For this exercise, I decided to do it sequentially for v1 then I saw that it was a bad practice to do all my tests on a single contract deployment, that's why I made a v2 that starts at line 357. This way, the tests follow the normal way of working of the contract, which led me to make some round trips when the workflow state changes. (maybe an optimization to do with that, because I have redundancies in the tests, but it's a bias, and at least everything is tested). 
+
+I could also detect a bug in the for loop of the tallyVotes() function because the loop should be set to 1 instead of 0 to bypass the GENESIS proposal which is originally set to not take into account people who didn't vote. 
+
+If the intention of GENESIS was to ignore people who did not vote, there is also a requirement missing in the setVote() function to prevent people from voting for the GENESIS proposal.
 
 
 Otherwise I think I have tested all the possibilities of interaction and functionalization with the contract.
