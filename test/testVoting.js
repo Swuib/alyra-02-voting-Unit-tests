@@ -395,10 +395,6 @@ contract("Voting", accounts => {
 
                 it("should test voter registration emit the proper event", async () => {
                     expectEvent(await votingInstance.addVoter(_user1), "VoterRegistered", {voterAddress: _user1});
-                    // for futures tests
-                    await votingInstance.addVoter(_user2);
-                    await votingInstance.addVoter(_user3);
-                    await votingInstance.addVoter(_user4);
                 });
 
                 describe("addVoter votertwice and ProposalsRegistrationStarted :", function () {
