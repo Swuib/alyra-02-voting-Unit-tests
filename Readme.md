@@ -29,7 +29,7 @@ Otherwise I think I have tested all the possibilities of interaction and functio
 * Then to run the test on the voting contract, run the command : ``$ truffle test``
 * Note : 
     
-    ##### Compiler configuration "0.8.17"
+    ##### Compiler configuration "0.8.13"
 
     ##### Using network 'development'.
 
