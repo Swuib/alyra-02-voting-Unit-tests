@@ -45,123 +45,123 @@ Otherwise I think I have tested all the possibilities of interaction and functio
 ## result obtained :
 
 ```
-    Contract: Voting
+  Contract: Voting
     Complete test v2 (good pratique):
       Smart contract owner test :
-        ✓ should define the owner of the smart contract (38ms)
-        ✓ should define that the user is not the owner of the smartcontract (41ms)
+        ✓ should define the owner of the smart contract (45ms)
+        ✓ should define that the user is not the owner of the smartcontract (35ms)
       Add Voters test :
         tallyVotes() before addVoter() test :
-          ✓ should define that the user is not allowed to interact with the function (731ms)
-          ✓ should revert because the proposal phase tally Votes is not open (137ms)
+          ✓ should define that the user is not allowed to interact with the function (1111ms)
+          ✓ should revert because the proposal phase tally Votes is not open (46ms)
         addVoter() test :
-          ✓ should define that the user is not allowed to interact with the function (57ms)
-          ✓ should test voter registration emit the proper event (842ms, 188080 gas)
+          ✓ should define that the user is not allowed to interact with the function (46ms)
+          ✓ should test voter registration emit the proper event (190ms, 47020 gas)
           addVoter votertwice and ProposalsRegistrationStarted :
-            ✓ should not add a voter twice (40ms)
-            ✓ should must verify that the Workflow Status is ProposalsRegistrationStarted (30ms)
+            ✓ should not add a voter twice (50ms)
+            ✓ should must verify that the Workflow Status is ProposalsRegistrationStarted (38ms)
       getVoter() test :
-        ✓ should check only voters (53ms)
-        ✓ should properly register a voter (52ms)
+        ✓ should check only voters (45ms)
+        ✓ should properly register a voter (51ms)
       Proposals Registering test :
         addProposal() before startProposalsRegistering() test :
-          ✓ should revert because the proposal phase is not yet open (49ms)
+          ✓ should revert because the proposal phase is not yet open (44ms)
         startProposalsRegistering() test :
-          ✓ should define that the user is not allowed to interact with the function (35ms)
-          ✓ should must verify that the Workflow Status Change (185ms, 89132 gas)
+          ✓ should define that the user is not allowed to interact with the function (40ms)
+          ✓ should must verify that the Workflow Status Change (268ms, 88940 gas)
         getOneProposal() GENESIS test :
-          ✓ should check only voters (35ms)
-          ✓ should must verify that the GENESIS proposal has been inserted into the proposal table was entered at the time of the state change (47ms)
+          ✓ should check only voters (50ms)
+          ✓ should must verify that the GENESIS proposal has been inserted into the proposal table was entered at the time of the state change (62ms)
         addProposal() test :
-          ✓ should check only voters (43ms)
+          ✓ should check only voters (39ms)
           ✓ should check that the proposal sent is not empty (47ms)
-          ✓ should check that the proposal has been sent (198ms, 55480 gas)
+          ✓ should check that the proposal has been sent (197ms, 55288 gas)
           getOneProposal() test :
-            ✓ should must verify that the proposal has been inserted in the proposal table (47ms)
+            ✓ should must verify that the proposal has been inserted in the proposal table (36ms)
         startVotingSession() before endProposalsRegistering() test :
-          ✓ should define that the user is not allowed to interact with the function (38ms)
-          ✓ should revert because the roposals phase is not finished (34ms)
-        endProposalsRegistering() test :
-          ✓ should define that the user is not allowed to interact with the function (36ms)
-          ✓ should must verify that the Workflow Status Change (159ms, 30799 gas)
-        startVotingSession() after endProposalsRegistering() test :
-          ✓ should must verify that the Workflow Status is endProposalsRegistering (83ms)
           ✓ should define that the user is not allowed to interact with the function (41ms)
-          ✓ should revert because the roposals phase is finished (97ms)
+          ✓ should revert because the roposals phase is not finished (106ms)
+        endProposalsRegistering() test :
+          ✓ should define that the user is not allowed to interact with the function (77ms)
+          ✓ should must verify that the Workflow Status Change (379ms, 30799 gas)
+        startVotingSession() after endProposalsRegistering() test :
+          ✓ should must verify that the Workflow Status is endProposalsRegistering (59ms)
+          ✓ should define that the user is not allowed to interact with the function (39ms)
+          ✓ should revert because the roposals phase is finished (62ms)
       Voting Session test :
         setVote() before startVotingSession() test :
-          ✓ should check only voters (49ms)
-          ✓ should revert because the vote phase is not yet open (37ms)
+          ✓ should check only voters (71ms)
+          ✓ should revert because the vote phase is not yet open (40ms)
         startVotingSession() test :
-          ✓ should define that the user is not allowed to interact with the function (60ms)
-          ✓ should must verify that the Workflow Status Change (131ms, 30754 gas)
+          ✓ should define that the user is not allowed to interact with the function (34ms)
+          ✓ should must verify that the Workflow Status Change (127ms, 30754 gas)
         setVote() test :
-          ✓ should must verify that the Workflow Status is VotingSessionStarted (34ms)
-          ✓ should check only voters (37ms)
-          ✓ should must verify that the vote corresponds to an existing proposal (43ms)
-          ✓ should must verify that the vote has been taken into account (368ms, 74913 gas)
+          ✓ should must verify that the Workflow Status is VotingSessionStarted (40ms)
+          ✓ should check only voters (41ms)
+          ✓ should must verify that the vote corresponds to an existing proposal (42ms)
+          ✓ should must verify that the vote has been taken into account (1175ms, 74913 gas)
           setVote() already vote test :
-            ✓ should must verify that you have not already voted (44ms)
+            ✓ should must verify that you have not already voted (37ms)
         tallyVotes() before endVotingSession() test :
-          ✓ should define that the user is not allowed to interact with the function (30ms)
-          ✓ should revert because the roposals phase is not finished (37ms)
+          ✓ should define that the user is not allowed to interact with the function (33ms)
+          ✓ should revert because the roposals phase is not finished (52ms)
         endVotingSession() test :
-          ✓ should define that the user is not allowed to interact with the function (38ms)
-          ✓ should must verify that the Workflow Status Change (132ms, 30733 gas)
+          ✓ should define that the user is not allowed to interact with the function (70ms)
+          ✓ should must verify that the Workflow Status Change (156ms, 30733 gas)
         startVotingSession() after endVotingSession() test :
-          ✓ should must verify that the Workflow Status is VotingSessionEnded (52ms)
-          ✓ should define that the user is not allowed to interact with the function (40ms)
-          ✓ should revert because the roposals phase is finished (45ms)
+          ✓ should must verify that the Workflow Status is VotingSessionEnded (42ms)
+          ✓ should define that the user is not allowed to interact with the function (35ms)
+          ✓ should revert because the roposals phase is finished (94ms)
       tally Votes test :
         addVoter() before tallyVotes() test :
-          ✓ should define that the user is not allowed to interact with the function (40ms)
-          ✓ should revert because the addVoter phase is not yet open (74ms)
+          ✓ should define that the user is not allowed to interact with the function (35ms)
+          ✓ should revert because the addVoter phase is not yet open (158ms)
         tallyVotes() test :
-          ✓ should define that the user is not allowed to interact with the function (99ms)
-          ✓ should must verify that the Workflow Status Change (156ms, 60461 gas)
+          ✓ should define that the user is not allowed to interact with the function (138ms)
+          ✓ should must verify that the Workflow Status Change (279ms, 60461 gas)
           Workflow test :
-            ✓ should must verify that the Workflow Status is VotesTallied (42ms)
+            ✓ should must verify that the Workflow Status is VotesTallied (41ms)
           endVotingSession() after tallyVotes() test :
-            ✓ should define that the user is not allowed to interact with the function (31ms)
-            ✓ should revert because the roposals phase is finished (30ms)
+            ✓ should define that the user is not allowed to interact with the function (296ms)
+            ✓ should revert because the roposals phase is finished (227ms)
       winningProposalID test :
-        ✓ should must verify that the winning proposition is equal to 1 (32ms)
+        ✓ should must verify that the winning proposition is equal to 1 (33ms)
         winningProposalID test bug in the for loop in the tallyVotes() function :
-          ✓ should must check that the winning proposal is equal to 0 because the people who did not vote make win the proposal GENESIS which originally is to correct this problem (35ms)
+          ✓ should must check that the winning proposal is equal to 0 because the people who did not vote make win the proposal GENESIS which originally is to correct this problem (96ms)
 ```
 
 ---
 
 ```bash
 ·------------------------------------------|----------------------------|-------------|----------------------------·
-|   Solc version: 0.8.17+commit.8df45f5f   ·  Optimizer enabled: false  ·  Runs: 200  ·  Block limit: 6718946 gas  │
+|   Solc version: 0.8.13+commit.abaa5c0e   ·  Optimizer enabled: false  ·  Runs: 200  ·  Block limit: 6718946 gas  │
 ···········································|····························|·············|·····························
-|  Methods                                                                                                         │
+|  Methods                                 ·                1 gwei/gas                ·      1601.24 eur/eth       │
 ·············|·····························|··············|·············|·············|··············|··············
 |  Contract  ·  Method                     ·  Min         ·  Max        ·  Avg        ·  # calls     ·  eur (avg)  │
 ·············|·····························|··············|·············|·············|··············|··············
-|  Voting    ·  addProposal                ·           -  ·          -  ·      55480  ·          55  ·          -  │
+|  Voting    ·  addProposal                ·           -  ·          -  ·      55288  ·          55  ·       0.09  │
 ·············|·····························|··············|·············|·············|··············|··············
-|  Voting    ·  addVoter                   ·           -  ·          -  ·      47020  ·          94  ·          -  │
+|  Voting    ·  addVoter                   ·           -  ·          -  ·      47020  ·          91  ·       0.08  │
 ·············|·····························|··············|·············|·············|··············|··············
-|  Voting    ·  endProposalsRegistering    ·           -  ·          -  ·      30799  ·          51  ·          -  │
+|  Voting    ·  endProposalsRegistering    ·           -  ·          -  ·      30799  ·          51  ·       0.05  │
 ·············|·····························|··············|·············|·············|··············|··············
-|  Voting    ·  endVotingSession           ·           -  ·          -  ·      30733  ·          24  ·          -  │
+|  Voting    ·  endVotingSession           ·           -  ·          -  ·      30733  ·          24  ·       0.05  │
 ·············|·····························|··············|·············|·············|··············|··············
-|  Voting    ·  setVote                    ·           -  ·          -  ·      74913  ·          20  ·          -  │
+|  Voting    ·  setVote                    ·           -  ·          -  ·      74913  ·          20  ·       0.12  │
 ·············|·····························|··············|·············|·············|··············|··············
-|  Voting    ·  startProposalsRegistering  ·           -  ·          -  ·      89132  ·          58  ·          -  │
+|  Voting    ·  startProposalsRegistering  ·           -  ·          -  ·      88940  ·          58  ·       0.14  │
 ·············|·····························|··············|·············|·············|··············|··············
-|  Voting    ·  startVotingSession         ·           -  ·          -  ·      30754  ·          27  ·          -  │
+|  Voting    ·  startVotingSession         ·           -  ·          -  ·      30754  ·          27  ·       0.05  │
 ·············|·····························|··············|·············|·············|··············|··············
-|  Voting    ·  tallyVotes                 ·       54465  ·      60461  ·      59712  ·           8  ·          -  │
+|  Voting    ·  tallyVotes                 ·       54465  ·      60461  ·      59712  ·           8  ·       0.10  │
 ·············|·····························|··············|·············|·············|··············|··············
 |  Deployments                             ·                                          ·  % of limit  ·             │
 ···········································|··············|·············|·············|··············|··············
-|  Voting                                  ·           -  ·          -  ·    2076814  ·      30.9 %  ·          -  │
+|  Voting                                  ·           -  ·          -  ·    1969427  ·      29.3 %  ·       3.15  │
 ·------------------------------------------|--------------|-------------|-------------|--------------|-------------·
 
-  51 passing (2m)
+  51 passing (3m)
 ```
 ---
 ## License :
