@@ -14,15 +14,30 @@ contract("Voting", accounts => {
     const _user4 = accounts[4];
     const _user5NotVoters = accounts[5];
 
+    const proposalGenesis = "GENESIS";
     const proposal1 = "proposal-1";
     const proposal2 = "proposal-2";
     const proposal3 = "proposal-3";
     const proposal4 = "proposal-4";
 
+    const    proposalGenesisID = new BN(0);
+    const    proposal1ID = new BN(1);
+    
+    const    vote1 = new BN(1);
+    const    voteUndefined = new BN(6);
+
+    const    RegisteringVoters = new BN(0);
+    const    ProposalsRegistrationStarted = new BN(1);
+    const    ProposalsRegistrationEnded = new BN(2);
+    const    VotingSessionStarted = new BN(3);
+    const    VotingSessionEnded = new BN(4);
+    const    VotesTallied = new BN(5);
+
     let votingInstance;
 
     /// -----------------------------------------------------------------------------------------------------------
-    /// @dev I left my first version as a comment because my way of iterating on a single contract deployment was not a good practice. Direction line 357 for the beginning of my tests 
+    /// @dev I left my first version as a comment because my way of iterating on a single contract deployment
+    /// was not a good practice. Direction line 372 for the beginning of my tests 
     /// -----------------------------------------------------------------------------------------------------------
 /*
     describe.skip("Complete test v1 (not good pratique):", function () {
@@ -409,7 +424,7 @@ contract("Voting", accounts => {
                     });
 
                     it("should must verify that the Workflow Status is ProposalsRegistrationStarted", async () => {
-                        expect(await votingInstance.workflowStatus.call()).to.be.bignumber.equal(BN(0));
+                        expect(await votingInstance.workflowStatus.call()).to.be.bignumber.equal(RegisteringVoters);
                     });
                 });
 
@@ -459,8 +474,8 @@ contract("Voting", accounts => {
 
                 it("should must verify that the Workflow Status Change", async () => {
                     expectEvent(await votingInstance.startProposalsRegistering(), "WorkflowStatusChange", {
-                        previousStatus: BN(0),
-                        newStatus: BN(1)
+                        previousStatus: RegisteringVoters,
+                        newStatus: ProposalsRegistrationStarted
                     });
                 });
             });
@@ -475,12 +490,12 @@ contract("Voting", accounts => {
                 });
 
                 it("should check only voters", async () => {
-                    await expectRevert(votingInstance.getOneProposal(BN(0),{from:_user5NotVoters}), "You're not a voter");
+                    await expectRevert(votingInstance.getOneProposal(proposalGenesisID,{from:_user5NotVoters}), "You're not a voter");
                 });
 
                 it("should must verify that the GENESIS proposal has been inserted into the proposal table was entered at the time of the state change", async () => {
-                    result = await votingInstance.getOneProposal(BN(0),{from:_user1});
-                    expect(result.description).to.equal("GENESIS");
+                    result = await votingInstance.getOneProposal(proposalGenesisID,{from:_user1});
+                    expect(result.description).to.equal(proposalGenesis);
                 });
             });
 
@@ -497,7 +512,7 @@ contract("Voting", accounts => {
                 });
 
                 it("should check only voters", async () => {
-                    await expectRevert(votingInstance.addProposal("Proposal-1",{from:_user5NotVoters}), "You're not a voter");
+                    await expectRevert(votingInstance.addProposal(proposal1,{from:_user5NotVoters}), "You're not a voter");
                 });
 
                 it("should check that the proposal sent is not empty", async () => {
@@ -506,7 +521,7 @@ contract("Voting", accounts => {
 
                 it("should check that the proposal has been sent", async () => {
                     expectEvent(await votingInstance.addProposal(proposal1,{from:_user1}), "ProposalRegistered",{
-                        proposalId:BN(1)
+                        proposalId:proposal1ID
                     });
                 });
 
@@ -521,7 +536,7 @@ contract("Voting", accounts => {
                     });
 
                     it("should must verify that the proposal has been inserted in the proposal table", async () => {
-                        result = await votingInstance.getOneProposal(BN(1),{from:_user1});
+                        result = await votingInstance.getOneProposal(proposal1ID,{from:_user1});
                         expect(result.description).to.equal(proposal1);
                     });
                 });
@@ -562,8 +577,8 @@ contract("Voting", accounts => {
 
                 it("should must verify that the Workflow Status Change", async () => {
                     expectEvent(await votingInstance.endProposalsRegistering(), "WorkflowStatusChange", {
-                        previousStatus: BN(1),
-                        newStatus: BN(2)
+                        previousStatus: ProposalsRegistrationStarted,
+                        newStatus: ProposalsRegistrationEnded
                     });
                 });
             });
@@ -580,7 +595,7 @@ contract("Voting", accounts => {
                 });
 
                 it("should must verify that the Workflow Status is endProposalsRegistering", async () => {
-                    expect(await votingInstance.workflowStatus.call()).to.be.bignumber.equal(BN(2));
+                    expect(await votingInstance.workflowStatus.call()).to.be.bignumber.equal(ProposalsRegistrationEnded);
                 });
 
                 it("should define that the user is not allowed to interact with the function", async () => {
@@ -608,11 +623,11 @@ contract("Voting", accounts => {
             describe("setVote() before startVotingSession() test :", function () {
 
                 it("should check only voters", async () => {
-                    await expectRevert(votingInstance.setVote(BN(1),{from:_user5NotVoters}), "You're not a voter");
+                    await expectRevert(votingInstance.setVote(vote1,{from:_user5NotVoters}), "You're not a voter");
                 });
 
                 it("should revert because the vote phase is not yet open", async () => {
-                    await expectRevert(votingInstance.setVote(BN(1),{from:_user1}), "Voting session havent started yet");
+                    await expectRevert(votingInstance.setVote(vote1,{from:_user1}), "Voting session havent started yet");
                 });
             });
 
@@ -624,8 +639,8 @@ contract("Voting", accounts => {
 
                 it("should must verify that the Workflow Status Change", async () => {
                     expectEvent(await votingInstance.startVotingSession(), "WorkflowStatusChange", {
-                        previousStatus: BN(2),
-                        newStatus: BN(3)
+                        previousStatus: ProposalsRegistrationEnded,
+                        newStatus: VotingSessionStarted
                     });
                 });
             });
@@ -643,21 +658,21 @@ contract("Voting", accounts => {
                 });
 
                 it("should must verify that the Workflow Status is VotingSessionStarted", async () => {
-                    expect(await votingInstance.workflowStatus.call()).to.be.bignumber.equal(BN(3));
+                    expect(await votingInstance.workflowStatus.call()).to.be.bignumber.equal(VotingSessionStarted);
                 });
 
                 it("should check only voters", async () => {
-                    await expectRevert(votingInstance.setVote(BN(1),{from:_user5NotVoters}), "You're not a voter");
+                    await expectRevert(votingInstance.setVote(vote1,{from:_user5NotVoters}), "You're not a voter");
                 });
 
                 it("should must verify that the vote corresponds to an existing proposal", async () => {
-                    await expectRevert(votingInstance.setVote(BN(6),{from:_user1}), "Proposal not found");
+                    await expectRevert(votingInstance.setVote(voteUndefined,{from:_user1}), "Proposal not found");
                 });
 
                 it("should must verify that the vote has been taken into account", async () => {
-                    expectEvent(await votingInstance.setVote(BN(1),{from:_user1}), "Voted", {
+                    expectEvent(await votingInstance.setVote(vote1,{from:_user1}), "Voted", {
                         voter: _user1,
-                        proposalId: BN(1)
+                        proposalId: proposal1ID
                     });
                 });
 
@@ -671,11 +686,11 @@ contract("Voting", accounts => {
                         await votingInstance.addProposal(proposal1,{from:_user1});
                         await votingInstance.endProposalsRegistering();
                         await votingInstance.startVotingSession();
-                        await votingInstance.setVote(BN(1),{from:_user1});
+                        await votingInstance.setVote(vote1,{from:_user1});
                     });
                 
                     it("should must verify that you have not already voted", async () => {
-                        await expectRevert(votingInstance.setVote(BN(1),{from:_user1}), "You have already voted");
+                        await expectRevert(votingInstance.setVote(VotingSessionStarted,{from:_user1}), "You have already voted");
                     });
                 });
             });
@@ -701,7 +716,7 @@ contract("Voting", accounts => {
                     await votingInstance.addProposal(proposal1,{from:_user1});
                     await votingInstance.endProposalsRegistering();
                     await votingInstance.startVotingSession();
-                    await votingInstance.setVote(BN(1),{from:_user1});
+                    await votingInstance.setVote(vote1,{from:_user1});
                 });
 
 
@@ -711,8 +726,8 @@ contract("Voting", accounts => {
 
                 it("should must verify that the Workflow Status Change", async () => {
                     expectEvent(await votingInstance.endVotingSession(), "WorkflowStatusChange", {
-                        previousStatus: BN(3),
-                        newStatus: BN(4)
+                        previousStatus: VotingSessionStarted,
+                        newStatus: VotingSessionEnded
                     });
                 });
             });
@@ -727,12 +742,12 @@ contract("Voting", accounts => {
                     await votingInstance.addProposal(proposal1,{from:_user1});
                     await votingInstance.endProposalsRegistering();
                     await votingInstance.startVotingSession();
-                    await votingInstance.setVote(BN(1),{from:_user1});
+                    await votingInstance.setVote(vote1,{from:_user1});
                     await votingInstance.endVotingSession();
                 });
 
                 it("should must verify that the Workflow Status is VotingSessionEnded", async () => {
-                    expect(await votingInstance.workflowStatus.call()).to.be.bignumber.equal(BN(4));
+                    expect(await votingInstance.workflowStatus.call()).to.be.bignumber.equal(VotingSessionEnded);
                 });
 
                 it("should define that the user is not allowed to interact with the function", async () => {
@@ -756,7 +771,7 @@ contract("Voting", accounts => {
                 await votingInstance.addProposal(proposal1,{from:_user1});
                 await votingInstance.endProposalsRegistering();
                 await votingInstance.startVotingSession();
-                await votingInstance.setVote(BN(1),{from:_user1});
+                await votingInstance.setVote(vote1,{from:_user1});
                 await votingInstance.endVotingSession();
             });
 
@@ -779,8 +794,8 @@ contract("Voting", accounts => {
                 
                 it("should must verify that the Workflow Status Change", async () => {
                     expectEvent(await votingInstance.tallyVotes(), "WorkflowStatusChange", {
-                        previousStatus: BN(4),
-                        newStatus: BN(5)
+                        previousStatus: VotingSessionEnded,
+                        newStatus: VotesTallied
                     });
                 });
 
@@ -794,13 +809,13 @@ contract("Voting", accounts => {
                         await votingInstance.addProposal(proposal1,{from:_user1});
                         await votingInstance.endProposalsRegistering();
                         await votingInstance.startVotingSession();
-                        await votingInstance.setVote(BN(1),{from:_user1});
+                        await votingInstance.setVote(vote1,{from:_user1});
                         await votingInstance.endVotingSession();
                         await votingInstance.tallyVotes();
                     });
 
                     it("should must verify that the Workflow Status is VotesTallied", async () => {
-                        expect(await votingInstance.workflowStatus.call()).to.be.bignumber.equal(BN(5));
+                        expect(await votingInstance.workflowStatus.call()).to.be.bignumber.equal(VotesTallied);
                     });
                 });
                 describe("endVotingSession() after tallyVotes() test :", function () {
@@ -827,13 +842,13 @@ contract("Voting", accounts => {
                 await votingInstance.addProposal(proposal1,{from:_user1});
                 await votingInstance.endProposalsRegistering();
                 await votingInstance.startVotingSession();
-                await votingInstance.setVote(BN(1),{from:_user1});
+                await votingInstance.setVote(vote1,{from:_user1});
                 await votingInstance.endVotingSession();
                 await votingInstance.tallyVotes();
             });
 
             it("should must verify that the winning proposition is equal to 1", async () => {
-                expect(await votingInstance.winningProposalID.call()).to.be.bignumber.equal(BN(1));
+                expect(await votingInstance.winningProposalID.call()).to.be.bignumber.equal(proposal1ID);
             });
             describe("winningProposalID test bug in the for loop in the tallyVotes() function :", function () {
                 let votingInstance;
@@ -856,7 +871,7 @@ contract("Voting", accounts => {
                 });
 
                 it("should must check that the winning proposal is equal to 0 because the people who did not vote make win the proposal GENESIS which originally is to correct this problem", async () => {
-                    expect(await votingInstance.winningProposalID.call()).to.be.bignumber.equal(BN(0));
+                    expect(await votingInstance.winningProposalID.call()).to.be.bignumber.equal(proposalGenesisID);
                 });
             });
         });
